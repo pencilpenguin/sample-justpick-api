@@ -6,4 +6,6 @@ workflows:
     jobs:
       - heroku/deploy-via-git
           post-steps:
-            - run: heroku config:set YELP_CLIENT_ID=$YELP_CLIENT_ID YELP_API_KEY=$YELP_API_KEY YELP_URL=$YELP_URL 
+            - run: heroku config:set YELP_CLIENT_ID=$YELP_CLIENT_ID
+            - run: heroku config:set YELP_API_KEY=$YELP_API_KEY
+            - run: heroku config:set YELP_URL=$YELP_URL
