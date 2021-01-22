@@ -4,9 +4,14 @@ orbs:
 workflows:
   heroku_deploy:
     jobs:
-      - heroku/deploy-via-git 
-      - app-config
-            steps:
-              - run:
-                  name: "Setup config vars"
-                  command: heroku config:set YELP_CLIENT_ID=$YELP_CLIENT_ID YELP_API_KEY=$YELP_API_KEY YELP_URL=$YELP_URL
+      - heroku/deploy-via-git
+      - config
+
+jobs:
+  config:
+    docker:
+      - image: circleci/heroku@0.0.10.
+    steps:
+      - run:
+          name: "Setup config vars"
+          command: heroku config:set YELP_CLIENT_ID=$YELP_CLIENT_ID YELP_API_KEY=$YELP_API_KEY YELP_URL=$YELP_URL
