@@ -7,7 +7,7 @@ const { rejects } = require('assert');
 
 const router = express.Router();
 
-router.get('/get-listings-from-yelp', async (req, res) => {
+router.get('/get-listings-from-yelp', (req, res) => {
     const parameters = {
         location: req.query.location,
     };
@@ -21,19 +21,30 @@ router.get('/get-listings-from-yelp', async (req, res) => {
       },
     };
 
-    try {
-      let listings = await request(options, (err, res, body) => {
-        if (err) {
-          throw err;
-        }
-        console.log(body);
-        return body;
+    const request = https.request(options, (res) => {
+      if (res.statusCode !== 200) {
+        console.error(`Did not get a Created from the server. Code: ${res.statusCode}`);
+        res.resume();
+        return;
+      }
+    
+      let data = '';
+    
+      res.on('data', (chunk) => {
+        data += chunk;
       });
-      res.json(listings);
-    } catch (err) {
-      console.log(err);
-    }
+    
+      res.on('end', () => {
+        console.log('Added new user');
+        console.log(JSON.parse(data));
+      });
 
+
+    })
+
+    request.on('error', (err) => {
+      console.error(`Encountered an error trying to make a request: ${err.message}`);
+    });
 });
 
 module.exports = router;
