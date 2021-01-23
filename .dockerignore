@@ -1,0 +1,9 @@
+node_modules
+Dockerfile
+Procfile
+.circleci
+.vscode
+.env
+.eslint*
+.git*
+notes*

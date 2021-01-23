@@ -8,7 +8,7 @@ const compression = require('compression');
 const api = require('./api/index');
 
 const dev = process.env.NODE_ENV !== 'production';
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8080;
 
 const server = express();
 
@@ -25,5 +25,5 @@ server.get('*', (_, res) => {
 });
 
 httpServer.listen(port, () => {
-    console.log(`Listening on port ${dev ? process.env.URL_API : process.env.PROD_URL_API}`);
+    console.log(`Listening on port https://localhost:${port}`);
 });
