@@ -40,8 +40,6 @@ module.exports.getListingsFromYelp = getListingsFromYelp;
  * 
  */
 getLocationCoordinates = async (location) => {
-    //http://api.positionstack.com/v1/forward?access_key=f92285d7f16b5f8920d6953f00e874f4&query=mcallen
-
     const parameters = {
         access_key: process.env.POSITIONSTACK_ACCESSKEY,
         query: location,
