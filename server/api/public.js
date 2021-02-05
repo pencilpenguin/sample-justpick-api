@@ -1,9 +1,68 @@
 const querystring = require('querystring');
 const express = require('express');
 
-const request = require('../utils/requests');
+const { request } = require('../utils/requests');
+const { getListingsFromYelp, getLocationCoordinates } = require('../services/services');
 
 const router = express.Router();
+
+
+/**
+ * Get a list of restaurants near a pair of latitude and longitude coordinates pair.
+ * If the latitude and longitude parameters are missing, then they are set by getting
+ * them from a location parameter.
+ * 
+ * @param lat {string}
+ * @param long {string}
+ * @param loc {string}
+ */
+router.get('/get-listings', async (req, res) => {
+  let listings = {}
+  let latitude = ''
+  let longitude = ''
+
+  if (Object.keys(req.query) == 0) {
+    return res.status(400).json({
+      "error": "invalid_input",
+      "message": "Missing latitude, longitude pair parameters or a location name parameter"
+    })
+  }
+
+  if (!req.query.lat && !req.query.long && !req.query.loc) {
+    return res.status(400).json({
+      "error": "invalid_input",
+      "message": "Missing latitude, longitude pair parameters or location name parameter"
+    })
+  }
+
+  // Check if the location coordinates are missing but the location name is provided
+  if ((!req.query.lat && !req.query.long) && req.query.loc) {
+    // Attempt to get the latitude and longitude coordinates from the provided location parameter
+    try {
+      let loc = await getLocationCoordinates(req.query.loc)
+      latitude = loc.latitude
+      longitude = loc.longitude
+    }
+    catch (err) {
+      res.status(400).json({
+        "error": "invalid_location",
+        "message": `${req.query.loc} did not return any results`
+      })
+    }
+  } else {
+    latitude = req.query.lat
+    longitude = req.query.long
+  }
+
+  try {
+    listings = await getListingsFromYelp(latitude, longitude)
+    return res.status(200).json(listings)
+  } catch (err) {
+    res.status(err.statusCode).send(err.statusMessage)
+  }
+
+})
+
 
 router.get('/get-listings-from-yelp', async (req, res) => {
     let listings = {};
