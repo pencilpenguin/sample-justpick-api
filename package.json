@@ -6,9 +6,9 @@
     "lint": "eslint . --ext .js",
     "test": "jest --config ./jest.config.json",
     "test:watch": "npm run test -- --watch",
-    "dev": "nodemon server/server.js",
-    "start": "node server/server.js",
-    "db": "node server/db.js"
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "db": "node src/db.js"
   },
   "author": "",
   "license": "ISC",
