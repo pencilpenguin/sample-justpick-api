@@ -1,0 +1,38 @@
+# Github
+.circleci
+README.md
+
+# Docker
+Dockerfile
+
+# Config files
+.eslintrc.js
+
+# Ignore files
+.dockerignore
+.eslintignore
+.gitignore
+
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# dotenv environment variables file
+.env
+.env.test
+
+# Editors
+.vscode
+notes/*
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
