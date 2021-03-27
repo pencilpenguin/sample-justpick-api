@@ -1,6 +1,18 @@
-# Github
-.circleci
+# Other
+TODO*
+*.odt
+*.md
+
+# Repository
 README.md
+tests/
+jest.config.js
+
+# Git, Github
+.git
+
+# CICD servers
+.circleci
 
 # Docker
 Dockerfile
