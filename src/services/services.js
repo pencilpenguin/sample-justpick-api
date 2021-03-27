@@ -9,15 +9,21 @@ const { request, httpRequest } = require('../utils/requests');
  * Make a request to the Yelp Fusion API to get a list of
  * restaurants near the latitude and longtitude provided.
  */
-getListingsFromYelp = async (latitude, longitude) => {
-    let listings = {};
+getListingsFromYelp = async (latitude, longitude, limit, offset) => {
+    let listings = {
+        "businesses": [],
+        "total": 0
+    }
+    let totalListings = 0
 
-    const parameters = {
+    let parameters = {
         latitude: latitude,
-        longitude: longitude
+        longitude: longitude,
+        limit: limit,
+        offset: offset
     };
 
-    const options = {
+    let options = {
       host: process.env.YELP_URL,
       path: `/v3/businesses/search?${querystring.stringify(parameters)}`,
       method: 'GET',
@@ -28,7 +34,17 @@ getListingsFromYelp = async (latitude, longitude) => {
     };
     
     try {
-       listings = await request(options);
+       let response = await request(options);
+       totalListings = response["total"]
+       listings["businesses"] = response["businesses"]
+       listings["total"] = response["total"]
+       while(totalListings > 0) {
+            parameters.offset += 50
+            options.path = `/v3/businesses/search?${querystring.stringify(parameters)}`
+            response = await request(options)
+            totalListings -= limit
+            listings["businesses"] = listings["businesses"].concat(response["businesses"]);
+       }
        return listings
     } catch (err) {
       throw err

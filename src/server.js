@@ -6,6 +6,7 @@ const helmet = require('express');
 const compression = require('compression');
 
 const api = require('./api/index');
+require('./database/postgres');
 
 const dev = process.env.NODE_ENV !== 'production';
 const port = process.env.PORT || 8080;

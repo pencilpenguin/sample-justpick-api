@@ -8,6 +8,10 @@ const router = express.Router();
 
 
 /**
+ * GET Methods
+ */
+
+/**
  * Get a list of restaurants near a pair of latitude and longitude coordinates pair.
  * If the latitude and longitude parameters are missing, then they are set by getting
  * them from a location parameter.
@@ -16,10 +20,12 @@ const router = express.Router();
  * @param long {string}
  * @param loc {string}
  */
-router.get('/get-listings', async (req, res) => {
+router.get('/listings', async (req, res) => {
   let listings = {}
-  let latitude = ''
-  let longitude = ''
+  let latitude = ""
+  let longitude = ""
+  let limit = 50
+  let offset = 0
 
   if (Object.keys(req.query) == 0) {
     return res.status(400).json({
@@ -54,8 +60,13 @@ router.get('/get-listings', async (req, res) => {
     longitude = req.query.long
   }
 
+  if (req.query.limit && req.query.offset) {
+    limit = req.query.limit
+    offset = req.query.offsetk
+  }
+
   try {
-    listings = await getListingsFromYelp(latitude, longitude)
+    listings = await getListingsFromYelp(latitude, longitude, limit, offset)
     return res.status(200).json(listings)
   } catch (err) {
     res.status(err.statusCode).send(err.statusMessage)
@@ -64,7 +75,7 @@ router.get('/get-listings', async (req, res) => {
 })
 
 
-router.get('/get-listings-from-yelp', async (req, res) => {
+router.get('/listings-yelp', async (req, res) => {
     let listings = {};
 
     const parameters = {
@@ -93,7 +104,7 @@ router.get('/get-listings-from-yelp', async (req, res) => {
 
 });
 
-router.get('/get-listings-from-google-places', async (req, res) => {
+router.get('/listings-googleplaces', async (req, res) => {
   let listings = {}
   
   const parameters = {
@@ -123,5 +134,8 @@ router.get('/get-listings-from-google-places', async (req, res) => {
 
 });
 
+/**
+ * POST Methods
+ */
 
 module.exports = router;

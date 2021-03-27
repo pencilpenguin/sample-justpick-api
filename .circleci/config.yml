@@ -5,7 +5,6 @@ workflows:
   heroku_deploy:
     jobs:
       - deploy
-      # - heroku/deploy-via-git
 
 jobs:
   deploy:

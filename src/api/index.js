@@ -8,7 +8,7 @@ function handleError(err, _, res, __) {
 
 // API server routes
 function api(server) {
-    server.use('/api/v1/public', publicExpressRoutes, handleError);
+    server.use('/api/v1', publicExpressRoutes, handleError);
 }
 
 module.exports = api;

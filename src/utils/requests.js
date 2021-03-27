@@ -51,7 +51,7 @@ httpRequest = (options) => {
  
      res.on('end', () => {
        console.log('Response complete');
-       console.log(JSON.parse(data));
+      //  console.log(JSON.parse(data));
        resolve(JSON.parse(data));
      });
    });
