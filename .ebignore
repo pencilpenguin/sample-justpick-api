@@ -6,7 +6,7 @@ TODO*
 # Repository
 README.md
 tests/
-jest.config.js
+jest.config.json
 
 # Git, Github
 .git

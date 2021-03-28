@@ -24,7 +24,7 @@ const httpServer = httpModule.createServer(server);
 /**
  * Health check endpoint
  */
-server.get('/health', (_, res) => {
+server.get('/', (_, res) => {
   res.send(200);
 })
 
