@@ -1,18 +1,18 @@
-version: 2.1
+version: "2.1"
 orbs:
-  heroku: circleci/heroku@0.0.10
+  eb: circleci/aws-elastic-beanstalk@1.0.0
+  node: circleci/node@4.1.0
 workflows:
-  heroku_deploy:
+  elastic-beanstalk-workflow:
     jobs:
-      - deploy
-
-jobs:
-  deploy:
-    executor: heroku/default
-    steps:
-      - checkout
-      - heroku/install
-      - run:
-          command: >
-            heroku config:set YELP_CLIENT_ID=$YELP_CLIENT_ID YELP_API_KEY=$YELP_API_KEY YELP_URL=$YELP_URL POSITIONSTACK_URL=$POSITIONSTACK_URL POSITIONSTACK_ACCESSKEY=$POSITIONSTACK_ACCESSKEY --app $APP_NAME
-      - heroku/deploy-via-git
+      # - node/test
+      - eb/deploy:
+          context: aws-creds
+          environment-name: $SERVICE_NAME
+          filters:
+            branches:
+              only:
+                - eb-dev
+          label: version-<<pipeline.number>>
+          # requires:
+            # - node/test

@@ -1,0 +1,18 @@
+version: 2.1
+orbs:
+  heroku: circleci/heroku@0.0.10
+workflows:
+  heroku_deploy:
+    jobs:
+      - deploy
+
+jobs:
+  deploy:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - run:
+          command: >
+            heroku config:set YELP_CLIENT_ID=$YELP_CLIENT_ID YELP_API_KEY=$YELP_API_KEY YELP_URL=$YELP_URL POSITIONSTACK_URL=$POSITIONSTACK_URL POSITIONSTACK_ACCESSKEY=$POSITIONSTACK_ACCESSKEY --app $APP_NAME
+      - heroku/deploy-via-git
