@@ -3,12 +3,13 @@ const express = require('express');
 
 const { request } = require('../utils/requests');
 const { getListingsFromYelp, getLocationCoordinates } = require('../services/services');
+const { updateUserPickList } = require('../services/dynamodb')
 
 const router = express.Router();
 
 
 /**
- * GET Methods
+ * Listings
  */
 
 /**
@@ -135,7 +136,34 @@ router.get('/listings-googleplaces', async (req, res) => {
 });
 
 /**
- * POST Methods
+ * Invites
  */
+
+router.post('/invites', async (req, res) => {
+    if (!req.body.from || !req.body.to || !req.body.picks) {
+      return res.status(400).json({
+        "error": "invalid_input",
+        "message": "Missing 'to' or 'picks' parameters in the request body."
+      })
+    }
+
+    from = req.body.from;
+    to = req.body.to;
+    user_picks = req.body.picks;
+    
+    // Update dynamodb item
+    try {
+      let response = await updateUserPickList(from, user_picks)
+      console.log(response)
+      if (response.httpResponse.statusCode == 200) {
+        res.send(200)
+      }
+    } catch (err) {
+      console.log(err)
+      res.send(500)
+    }  
+
+});
+
 
 module.exports = router;
